@@ -275,7 +275,7 @@ namespace Microsoft.VisualStudio.Services.Agent.Worker.Build
             // ignore any outputs by redirect them into a string list, since the output might contains secrets.
             List<string> outputStrings = new List<string>();
             int exitcode = await ExecuteGitCommandAsync(context, repositoryPath, "config", StringUtil.Format($"--get-all {configKey}"), outputStrings);
-            
+
             return exitcode == 0;
         }
 
@@ -300,7 +300,7 @@ namespace Microsoft.VisualStudio.Services.Agent.Worker.Build
             Version version = null;
             List<string> outputStrings = new List<string>();
             int exitCode = await ExecuteGitCommandAsync(context, IOUtil.GetWorkPath(HostContext), "version", null, outputStrings);
-            context.Debug($"git version ouput: {string.Join(Environment.NewLine, outputStrings)}");
+            context.Debug($"git version output: {string.Join(Environment.NewLine, outputStrings)}");
             if (exitCode == 0)
             {
                 // remove any empty line.
