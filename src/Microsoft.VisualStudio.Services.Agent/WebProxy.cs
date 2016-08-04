@@ -45,8 +45,11 @@ namespace Microsoft.VisualStudio.Services.Agent
                 if (!string.IsNullOrEmpty(proxyConfigFile) && File.Exists(proxyConfigFile))
                 {
                     var proxyConfig = File.ReadAllLines(proxyConfigFile);
-                    username = proxyConfig[0];
-                    password = proxyConfig[1];
+                    if (proxyConfig.Length == 2)
+                    {
+                        username = proxyConfig[0];
+                        password = proxyConfig[1];
+                    }
                 }
 
                 ICredentials cred = null;
