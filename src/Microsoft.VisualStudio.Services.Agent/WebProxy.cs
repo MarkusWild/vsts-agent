@@ -1,7 +1,5 @@
-using Microsoft.VisualStudio.Services.Agent.Util;
 using Microsoft.VisualStudio.Services.Common;
 using System;
-using System.IO;
 using System.Net;
 
 namespace Microsoft.VisualStudio.Services.Agent
