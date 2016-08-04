@@ -3,7 +3,6 @@ using Microsoft.VisualStudio.Services.Agent.Util;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,7 +23,7 @@ namespace Microsoft.VisualStudio.Services.Agent.Worker
             // Validate args.
             ArgUtil.NotNullOrEmpty(pipeIn, nameof(pipeIn));
             ArgUtil.NotNullOrEmpty(pipeOut, nameof(pipeOut));
-            WebProxy.ApplyProxySettings();
+            WebProxy.ApplyProxySettings(IOUtil.GetProxyConfigFilePath());
             var jobRunner = HostContext.GetService<IJobRunner>();
 
             using (var channel = HostContext.CreateService<IProcessChannel>())

@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.Services.Common;
 using System;
 using System.Net;
+using System.IO;
 
 namespace Microsoft.VisualStudio.Services.Agent
 {
@@ -25,11 +26,11 @@ namespace Microsoft.VisualStudio.Services.Agent
         public Uri GetProxy(Uri destination) => ProxyAddress;
 
         public bool IsBypassed(Uri uri)
-        { 
-            return false;
-        }        
+        {
+            return uri.IsLoopback;
+        }
 
-        public static void ApplyProxySettings()
+        public static void ApplyProxySettings(string proxyConfigFile)
         {
             if (_proxySettingsApplied)
             {
@@ -39,9 +40,28 @@ namespace Microsoft.VisualStudio.Services.Agent
             string proxy = Environment.GetEnvironmentVariable("VSTS_HTTP_PROXY");
             if (!string.IsNullOrEmpty(proxy))
             {
+                string username = null;
+                string password = null;
+                if (!string.IsNullOrEmpty(proxyConfigFile) && File.Exists(proxyConfigFile))
+                {
+                    var proxyConfig = File.ReadAllLines(proxyConfigFile);
+                    username = proxyConfig[0];
+                    password = proxyConfig[1];
+                }
+
+                ICredentials cred = null;
+                if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                {
+                    cred = CredentialCache.DefaultNetworkCredentials;
+                }
+                else
+                {
+                    cred = new NetworkCredential(username, password);
+                }
+
                 VssHttpMessageHandler.DefaultWebProxy = new WebProxy(new Uri(proxy))
                 {
-                    Credentials = CredentialCache.DefaultNetworkCredentials
+                    Credentials = cred
                 };
             }
 

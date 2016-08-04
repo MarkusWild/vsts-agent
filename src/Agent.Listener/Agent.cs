@@ -34,7 +34,7 @@ namespace Microsoft.VisualStudio.Services.Agent.Listener
         {
             try
             {
-                WebProxy.ApplyProxySettings();
+                WebProxy.ApplyProxySettings(IOUtil.GetProxyConfigFilePath());
                 _inConfigStage = true;
                 _completedCommand.Reset();
                 _term.CancelKeyPress += CtrlCHandler;
